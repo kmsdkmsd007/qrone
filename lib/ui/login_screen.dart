@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 
-class Loginscreen extends StatefulWidget {
-  const Loginscreen({super.key});
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
 
   @override
-  LoginscreenState createState() => LoginscreenState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
-class LoginscreenState extends State<Loginscreen> {
-  // State variables
+class _LoginPageState extends State<LoginPage> {
   final formKey = GlobalKey<FormState>();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -31,85 +30,152 @@ class LoginscreenState extends State<Loginscreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Form(
-        key: formKey,
-        child: Padding(
-          padding: const EdgeInsets.only(right: 10, left: 10),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            spacing: 30,
-            children: [
-              TextFormField(
-                controller: emailController,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black),
-                      borderRadius: BorderRadius.circular(19)),
-                  errorBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.red)),
-                  labelText: 'Email',
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your email';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: passwordController,
-                obscureText: isObscured,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(19)),
-                  errorBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.red)),
-                  labelText: 'Password',
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      isObscured ? Icons.visibility : Icons.visibility_off,
+      appBar: AppBar(
+        title: Text('Login'),
+      ),
+      backgroundColor: Colors.white,
+      body: Center(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            child: Form(
+              key: formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  // Title
+                  Text(
+                    "Login here",
+                    style: TextStyle(
+                      fontSize: 24.0,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blue,
                     ),
-                    onPressed: () {
-                      setState(() {
-                        isObscured = !isObscured;
-                      });
+                  ),
+                  const SizedBox(height: 10),
+                  // Subtitle
+                  Text(
+                    "Welcome back you've been missed!",
+                    style: TextStyle(
+                      fontSize: 16.0,
+                      color: Colors.grey[600],
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 30),
+                  // Email TextField
+                  // TextField(
+                  //   decoration: InputDecoration(
+                  //     labelText: "Email",
+                  //     border: OutlineInputBorder(
+                  //       borderRadius: BorderRadius.circular(8.0),
+
+                  //     ),
+
+                  //   ),
+                  // ),
+                  TextFormField(
+                    controller: emailController,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.black),
+                          borderRadius: BorderRadius.circular(8.0)),
+                      errorBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.red)),
+                      labelText: 'Email',
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your email';
+                      }
+                      return null;
                     },
                   ),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your password';
-                  }
-                  return null;
-                },
+                  const SizedBox(height: 20),
+                  // Password TextField
+                  TextFormField(
+                    controller: passwordController,
+                    obscureText: isObscured,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8.0)),
+                      errorBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.red)),
+                      labelText: 'Password',
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          isObscured ? Icons.visibility : Icons.visibility_off,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            isObscured = !isObscured;
+                          });
+                        },
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your password';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 10),
+                  // Forgot password link
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: TextButton(
+                      onPressed: () {
+                        // Add your forgot password logic
+                      },
+                      child: Text(
+                        "Forgot your password?",
+                        style: TextStyle(color: Colors.blue),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  // Sign In Button
+                  ElevatedButton(
+                    onPressed: () {
+                      if (formKey.currentState!.validate()) {
+                        login();
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      minimumSize:
+                          Size(double.infinity, 50), // Full width button
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                    ),
+                    child: Text(
+                      "Sign in",
+                      style: TextStyle(fontSize: 16.0),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  // Create new account link
+                  TextButton(
+                    onPressed: () {
+                      // Add your create account logic
+                    },
+                    child: Text(
+                      "Create new account",
+                      style: TextStyle(color: Colors.grey[700]),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  // Or continue with
+                  Text("Or continue with"),
+                  const SizedBox(height: 20),
+                  // Social Media Buttons
+                ],
               ),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.deepPurple,
-                ),
-                onPressed: () {
-                  if (formKey.currentState!.validate()) {
-                    login();
-                  }
-                },
-                child: Text(
-                  '  Login   ',
-                  style: TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.bold),
-                ),
-              ),
-            ],
+            ),
           ),
         ),
       ),
     );
-  }
-
-  // Important: Always dispose controllers to prevent memory leaks
-  @override
-  void dispose() {
-    emailController.dispose();
-    passwordController.dispose();
-    super.dispose();
   }
 }
