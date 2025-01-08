@@ -3,12 +3,23 @@ import 'package:ioc_container/ioc_container.dart';
 import 'package:qrone/features/login/login_controller.dart';
 import 'package:qrone/features/login/login_screen.dart';
 
+late IocContainer container;
+
 void main() {
+  if (!_isContainerInitialized()) {
     container = compose().toContainer();
+  }
   runApp(const MyApp());
 }
 
-late final IocContainer container;
+bool _isContainerInitialized() {
+  try {
+    container;
+    return true;
+  } catch (_) {
+    return false;
+  }
+}
 
 /// Register services using the builder
 IocContainerBuilder compose([bool allowOverrides = false]) =>
