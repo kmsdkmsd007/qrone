@@ -1,23 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:qrone/features/login/login_state.dart';
+import 'package:qrone/navigation/navigations.dart';
+import 'package:qrone/services/auth_service.dart';
 
 class LoginController extends ValueNotifier<LoginState> {
-  
-  /// The navigator key
   final GlobalKey<NavigatorState> navigatorKey;
+  final AuthService _authService;
 
-  LoginController({required this.navigatorKey}):super(createLoginState());
+  LoginController({
+    required this.navigatorKey,
+    required AuthService authService,
+  })  : _authService = authService,
+        super(createLoginState());
+        
+  // LoginController({required this.navigatorKey}):super(createLoginState());
 
-  void login(String username, String password) async {
-    value = value.copyWith(isLoading: true);
-    // Add your login logic here
-    await Future.delayed(Duration(seconds: 2)); // Simulate a network call
-    value = value.copyWith(isLoading: false);
-  }
-
-  togglePasswordVisibility() {
+  void togglePasswordVisibility() {
     value = value.copyWith(isPassword: !value.isPassword);
   }
 
-  
+  Future<void> login(String email, String password) async {
+    try {
+      await _authService.signIn(email, password);
+      navigatorKey.currentState?.pushReplacementNamed(Routes.home);
+    } catch (e) {
+      // Handle login errors
+      debugPrint(e.toString());
+    }
+  }
 }

@@ -5,6 +5,7 @@ import 'package:qrone/features/login/login_controller.dart';
 import 'package:qrone/features/login/login_state.dart';
 import 'package:ioc_container/ioc_container.dart';
 import 'package:qrone/main.dart';
+import 'package:qrone/services/auth_service.dart';
 import 'package:qrone/theme.dart';
 
 IocContainerBuilder compose([bool allowOverrides = false]) =>
@@ -14,7 +15,8 @@ IocContainerBuilder compose([bool allowOverrides = false]) =>
       )
       ..addSingleton(
         (container) => LoginController(
-         navigatorKey:  container.get<GlobalKey<NavigatorState>>(),
+          navigatorKey: container.get<GlobalKey<NavigatorState>>(),
+          authService: container.get<AuthService>(),
         ),
       );
 

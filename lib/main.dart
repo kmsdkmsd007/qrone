@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:ioc_container/ioc_container.dart';
+import 'package:qrone/features/home/home_controller.dart';
 import 'package:qrone/features/login/login_controller.dart';
-import 'package:qrone/features/login/login_screen.dart';
+import 'package:qrone/features/splash/splash_controller.dart'; 
+import 'package:qrone/navigation/navigations.dart';
+import 'package:qrone/services/auth_service.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 late IocContainer container;
 
-void main() {
+void main() async {
+   await Supabase.initialize(
+    url: 'https://zaqwakqcugnlnpqrsjkv.supabase.co',
+    anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InphcXdha3FjdWdubG5wcXJzamt2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzY0ODAyNzMsImV4cCI6MjA1MjA1NjI3M30.DIMKuYzz_BHrZ-VrGivDVaAorNjY3IJQlaTQlhLB1jY',
+  );
   if (!_isContainerInitialized()) {
     container = compose().toContainer();
   }
@@ -27,25 +35,33 @@ IocContainerBuilder compose([bool allowOverrides = false]) =>
       ..addSingleton(
         (container) => GlobalKey<NavigatorState>(),
       )
-      // ..addSingleton(
-      //   (container) => Client(),
-      // )
+      ..addSingleton(
+        (container) => AuthService(),
+      )
+      ..addSingleton((container) => SplashController(container.get<GlobalKey<NavigatorState>>()))
       ..addSingleton(
         (container) => LoginController(
-         navigatorKey:  container.get<GlobalKey<NavigatorState>>(),
+          navigatorKey: container.get<GlobalKey<NavigatorState>>(),
+          authService: container.get<AuthService>(),
+        ),
+      )
+      ..addSingleton(
+        (container) => HomeController(
+          navigatorKey: container.get<GlobalKey<NavigatorState>>(),
+          authService: container.get<AuthService>(),
         ),
       );
-
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      home: LoginPage(),
+      navigatorKey: container.get<GlobalKey<NavigatorState>>(),
+      onGenerateRoute: AppRouter.generateRoute,
+      initialRoute: Routes.splash, // Change this to splash route
     );
   }
 }
