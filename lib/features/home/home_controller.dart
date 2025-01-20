@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:qrone/navigation/navigations.dart';
 import 'package:qrone/services/auth_service.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class HomeController {
   final GlobalKey<NavigatorState> navigatorKey;
@@ -11,8 +12,10 @@ class HomeController {
     required AuthService authService,
   }) : _authService = authService;
 
-  Future<void> logout() async {
-    await _authService.signOut();
-    navigatorKey.currentState?.pushReplacementNamed(Routes.login);
+  Future<void> logout() async {  try {
+                await Supabase.instance.client.auth.signOut();
+                 navigatorKey.currentState?.pushReplacementNamed(Routes.login);
+              } catch (_) {}
+   
   }
 }

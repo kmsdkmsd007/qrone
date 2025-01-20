@@ -15,7 +15,10 @@ class AppRouter {
       case Routes.splash:
         return MaterialPageRoute(builder: (_) => Splashscreen());
       case Routes.login:
-        return MaterialPageRoute(builder: (_) => LoginPage());
+        return MaterialPageRoute(
+          settings: settings,  // Important: pass the settings
+          builder: (_) => LoginPage(),
+        );
       case Routes.home:
         return MaterialPageRoute(builder: (_) => HomeScreen());
       default:

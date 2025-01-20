@@ -19,8 +19,15 @@ class HomeScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: const Center(
-        child: Text('Home Screen'),
+      body:   Center(
+        child: Column(
+          children: [
+            ElevatedButton(onPressed: (){
+              controller.logout()
+;            }, child: Text('Sign out')),
+            Text('Home Screen'),
+          ],
+        ),
       ),
     );
   }

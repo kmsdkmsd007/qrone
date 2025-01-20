@@ -36,7 +36,7 @@ IocContainerBuilder compose([bool allowOverrides = false]) =>
         (container) => GlobalKey<NavigatorState>(),
       )
       ..addSingleton(
-        (container) => AuthService(),
+        (container) => AuthService(Supabase.instance.client),
       )
       ..addSingleton((container) => SplashController(container.get<GlobalKey<NavigatorState>>()))
       ..addSingleton(
