@@ -15,7 +15,9 @@ class HomeController {
   Future<void> logout() async {  try {
                 await Supabase.instance.client.auth.signOut();
                  navigatorKey.currentState?.pushReplacementNamed(Routes.login);
-              } catch (_) {}
+              } catch (_) {
+                print(_);
+              }
    
   }
 }
