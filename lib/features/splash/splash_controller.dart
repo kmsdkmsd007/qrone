@@ -8,12 +8,16 @@ class SplashController {
   SplashController(this.navigatorKey);
 
    checkAuthState()async{
-    await Future.delayed(const Duration(seconds: 2)); // Add a small delay for splash screen
-
-        if (Supabase.instance.client.auth.currentUser != null) {
-navigatorKey.currentState!.pushReplacementNamed(Routes.home);
+        Supabase.instance.client.auth.onAuthStateChange.listen((event) {
+        if (event.session!= null) {
+          if(event.session!.user!=null){
+            navigatorKey.currentState!.pushReplacementNamed(Routes.home);
+          }else{
+            navigatorKey.currentState!.pushReplacementNamed(Routes.login);
+          }
     } else {
       navigatorKey.currentState!.pushReplacementNamed(Routes.login);
     }
+   });
    }
 }

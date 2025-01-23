@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ioc_container/ioc_container.dart';
+import 'package:qrone/features/categories/category_controller.dart';
 import 'package:qrone/features/home/home_controller.dart';
 import 'package:qrone/features/login/login_controller.dart';
 import 'package:qrone/features/splash/splash_controller.dart'; 
@@ -10,9 +11,9 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 late IocContainer container;
 
 void main() async {
-   await Supabase.initialize(
-    url: 'https://zaqwakqcugnlnpqrsjkv.supabase.co',
-    anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InphcXdha3FjdWdubG5wcXJzamt2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzY0ODAyNzMsImV4cCI6MjA1MjA1NjI3M30.DIMKuYzz_BHrZ-VrGivDVaAorNjY3IJQlaTQlhLB1jY',
+ await Supabase.initialize(
+    url: 'https://ujtyprurykbhwtxprlxz.supabase.co',
+    anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVqdHlwcnVyeWtiaHd0eHBybHh6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjY1NjkxNzYsImV4cCI6MjA0MjE0NTE3Nn0.2c-H_C4XPofhfDS70Ow09Hf-rcu6rRmK3L79unvBaOU',
   );
   if (!_isContainerInitialized()) {
     container = compose().toContainer();
@@ -39,6 +40,7 @@ IocContainerBuilder compose([bool allowOverrides = false]) =>
         (container) => AuthService(Supabase.instance.client),
       )
       ..addSingleton((container) => SplashController(container.get<GlobalKey<NavigatorState>>()))
+      ..addSingleton((container) => CategoryController(authService: container.get<AuthService>(), navigatorKey:  container.get<GlobalKey<NavigatorState>>()))
       ..addSingleton(
         (container) => LoginController(
           navigatorKey: container.get<GlobalKey<NavigatorState>>(),
