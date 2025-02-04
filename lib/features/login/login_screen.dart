@@ -13,16 +13,14 @@ class LoginPage extends StatelessWidget {
   final controller= container.get<LoginController>();
   
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
+  Widget build(BuildContext context) => Scaffold(
       appBar: AppBar(
         title: Text('Login'),
       ),
       backgroundColor: Colors.white,
       body: ValueListenableBuilder<LoginState>(
         valueListenable: controller, // Ensure this listens to the correct controller
-        builder: (context, value,child) {
-          return Center(
+        builder: (context, value,child) => Center(
             child: SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -56,9 +54,9 @@ class LoginPage extends StatelessWidget {
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.black),
-                              borderRadius: BorderRadius.circular(8.0)),
+                              borderRadius: BorderRadius.circular(8.0),),
                           errorBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.red)),
+                              borderSide: BorderSide(color: Colors.red),),
                           labelText: 'Email',
                         ),
                         validator: (value) {
@@ -75,9 +73,9 @@ class LoginPage extends StatelessWidget {
                         obscureText: value.isPassword,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8.0)),
+                              borderRadius: BorderRadius.circular(8.0),),
                           errorBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.red)),
+                              borderSide: BorderSide(color: Colors.red),),
                           labelText: 'Password',
                           suffixIcon: IconButton(
                             icon: Icon(
@@ -148,9 +146,7 @@ class LoginPage extends StatelessWidget {
                 ),
               ),
             ),
-          );
-        }
+          ),
       ),
     );
-  }
 }

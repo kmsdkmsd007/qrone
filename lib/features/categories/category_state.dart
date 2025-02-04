@@ -13,7 +13,7 @@ CategoryState createCategoryState({
  String error=''
  ,
  AddCategoryState  addCategoryState= const (isAdded: false, isLoading: false, error: '',)
-}) =>
+,}) =>
     ( addCategoryState: addCategoryState,  error: error, categories: categories, isLoading: isLoading);
 
 extension GetCategoryStateExtensions on CategoryState {
@@ -23,7 +23,7 @@ extension GetCategoryStateExtensions on CategoryState {
     ImmutableList<CategoryModel>? categories,
     String? error,
     AddCategoryState? addState
-  }) =>
+  ,}) =>
       createCategoryState(
         error: error??this.error,
         addCategoryState: addState??this.addCategoryState,
@@ -48,7 +48,7 @@ typedef AddCategoryState = ({
 AddCategoryState createAddCategoryState({
  bool isLoading=false,
  bool isAdded=false,
- String error=''
+ String error='',
 }) =>
     (  error: error,isAdded:isAdded, isLoading: isLoading);
 
@@ -58,7 +58,7 @@ extension AddCategoryStateExtensions on AddCategoryState {
    bool? isLoading,
    bool? isAdded,
    
-    String? error
+    String? error,
   }) =>
       createAddCategoryState(
         error: error??this.error,

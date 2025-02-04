@@ -9,7 +9,7 @@ import '../data/mocked_data.dart';
 import '../helper/utils.dart';
 
 void main() {
-  late Supabase supabase;
+  
 
   setUp(() async {
     mockAppLink();
@@ -50,7 +50,7 @@ void main() {
       navigatorKey: container.get<GlobalKey<NavigatorState>>(),
       onGenerateRoute: AppRouter.generateRoute,
       home: const HomeScreen(),  // Use home instead of initialRoute
-    ));
+    ),);
 
     await tester.pumpAndSettle();  // Wait for initial frame
 

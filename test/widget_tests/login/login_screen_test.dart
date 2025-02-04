@@ -123,7 +123,7 @@ void main() {
 
     // Check initial state (password should be hidden)
     final passwordFieldFinder = find.byType(TextFormField).at(1);
-    final TextField passwordField = tester.widget<TextField>(
+    final passwordField = tester.widget<TextField>(
       find.descendant(
         of: passwordFieldFinder,
         matching: find.byType(TextField),

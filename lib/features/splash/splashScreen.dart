@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:qrone/features/splash/splash_controller.dart';
-import 'package:qrone/main.dart';
-import 'package:qrone/services/auth_service.dart';
-import 'package:qrone/navigation/navigations.dart';
+import 'package:qrone/main.dart'; 
 
 class Splashscreen extends StatefulWidget {
   const Splashscreen({super.key});
@@ -19,11 +17,9 @@ class _SplashscreenState extends State<Splashscreen> {
 
  
   @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
+  Widget build(BuildContext context) => const Scaffold(
       body: Center(
         child: CircularProgressIndicator(),
       ),
     );
-  }
 }

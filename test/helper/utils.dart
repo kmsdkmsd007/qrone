@@ -42,6 +42,6 @@ IocContainerBuilder composeTest([bool allowOverrides = false]) =>
       ..addSingleton(
         (container) => HomeController(
           navigatorKey: container.get<GlobalKey<NavigatorState>>(),
-          authService: container.get<AuthService>(),
+          
         ),
       );

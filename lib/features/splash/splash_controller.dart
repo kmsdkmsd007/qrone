@@ -10,12 +10,8 @@ class SplashController {
    checkAuthState()async{
         Supabase.instance.client.auth.onAuthStateChange.listen((event) {
         if (event.session!= null) {
-          if(event.session!.user!=null){
-            navigatorKey.currentState!.pushReplacementNamed(Routes.home);
-          }else{
-            navigatorKey.currentState!.pushReplacementNamed(Routes.login);
-          }
-    } else {
+          navigatorKey.currentState!.pushReplacementNamed(Routes.home);
+            } else {
       navigatorKey.currentState!.pushReplacementNamed(Routes.login);
     }
    });
