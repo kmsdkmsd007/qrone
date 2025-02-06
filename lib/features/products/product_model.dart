@@ -1,38 +1,35 @@
+import 'package:qrone/features/categories/category_model.dart';
+import 'package:qrone/features/companies/company_model.dart';
+
 typedef ProductModel = ({
   int id,
   String name,
-  int companyId,
-  String companyName,
   String imageUrl,
   int priceId,
+  CompanyModel company,
   double price,
-  int categoryId,
-  String categoryTitle,
+  CategoryModel category,
   String barCode,
 });
 
 ProductModel productAttribute({
   required int id,
   required String name,
-  required int companyId,
-  required String companyName,
+  required CompanyModel company,
   required String imageUrl,
   required int priceId,
   required double price,
-  required int categoryId,
-  required String categoryTitle,
+  required CategoryModel category,
   required String barCode,
 }) =>
     (
       id: id,
       name: name,
-      companyId: companyId,
-      companyName: companyName,
+      company: company,
       imageUrl: imageUrl,
       priceId: priceId,
       price: price,
-      categoryId: categoryId,
-      categoryTitle: categoryTitle,
+      category: category,
       barCode: barCode,
     );
 
@@ -40,36 +37,33 @@ extension ProductModelExtension on ProductModel {
   ProductModel copyWith({
     int? id,
     String? name,
-    int? companyId,
-    String? companyName,
+    CompanyModel? company,
     String? imageUrl,
     int? priceId,
     double? price,
-    int? categoryId,
-    String? categoryTitle,
+    CategoryModel? category,
     String? barCode,
   }) =>
       (
         id: id ?? this.id,
         name: name ?? this.name,
-        companyId: companyId ?? this.companyId,
-        companyName: companyName ?? this.companyName,
+        company: company ?? this.company,
         imageUrl: imageUrl ?? this.imageUrl,
         priceId: priceId ?? this.priceId,
         price: price ?? this.price,
-        categoryId: categoryId ?? this.categoryId,
-        categoryTitle: categoryTitle ?? this.categoryTitle,
+        category: category ?? this.category,
         barCode: barCode ?? this.barCode,
       );
 
   Map<String, dynamic> toJson() => {
         'id': id,
         'name': name,
-        'company_id': companyId,
+        'company_id': company.id,
         'product_image': imageUrl,
         'price_id': priceId,
-        'category_id': categoryId,
-        'barcode': barCode,
+
+        'category_id': category.id, // Assuming CategoryModel has toJson method
+        'bar_code': "barCode",
       };
 }
 
@@ -83,20 +77,21 @@ extension ProductModelJson on Map<String, dynamic> {
           'product_image': final String imageUrl,
           'price_id': final int priceId,
           'price': final num price,
-          'category_id': final int categoryId,
-          'category_title': final String categoryTitle,
+          'category': final Map<String, dynamic> categoryJson,
           'bar_code': final String barCode,
         } =>
           (
             id: id,
             name: name,
-            companyId: companyId,
-            companyName: companyName,
+            company: companyModel(
+              id: companyId,
+              name: companyName,
+            ),
             imageUrl: imageUrl,
             priceId: priceId,
             price: price.toDouble(),
-            categoryId: categoryId,
-            categoryTitle: categoryTitle,
+            category: categoryJson
+                .toCategoryModel()!, // Assuming you have this extension method
             barCode: barCode,
           ),
         _ => null

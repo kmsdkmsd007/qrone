@@ -1,6 +1,6 @@
 typedef CompanyModel = ({int id, String name});
 
-CompanyModel productAttribute({
+CompanyModel companyModel({
   required int id,
   required String name,
 }) =>

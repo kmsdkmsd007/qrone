@@ -17,10 +17,8 @@ ProductState createProductState({
     name: '',
     price: 0,
     priceId: 0,
-    companyId: 0,
-    companyName: '',
-    categoryId: 0,
-    categoryTitle: '',
+    company: (id: -1, name: ''),
+    category: (id: -1, name: ''),
     id: 0
   ),
   String error = '',

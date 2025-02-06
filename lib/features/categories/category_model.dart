@@ -1,6 +1,6 @@
 typedef CategoryModel = ({int id, String name});
 
-CategoryModel productAttribute({
+CategoryModel categoryModel({
   required int id,
   required String name,
 }) =>
@@ -14,5 +14,12 @@ extension CategoryModelJson on Map<String, dynamic> {
         } =>
           (id: id, name: name),
         _ => null
+      };
+}
+
+extension CategoryModelToJson on CategoryModel {
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'title': name,
       };
 }

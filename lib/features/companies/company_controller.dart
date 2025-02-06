@@ -34,8 +34,10 @@ class CompanyController extends ValueNotifier<CompanyState> {
       await Supabase.instance.client
           .from('companies')
           .insert({"name": company});
-      value = value.copyWith(
-        isLoading: false,
+      emit(
+        value.copyWith(
+          isLoading: false,
+        ),
       );
 
       getAllCompanies();
@@ -46,8 +48,10 @@ class CompanyController extends ValueNotifier<CompanyState> {
           content: Text(e.friendlyMessage),
         ),
       );
-      value = value.copyWith(
-        isLoading: false,
+      emit(
+        value.copyWith(
+          isLoading: false,
+        ),
       );
 
       navigatorKey.currentState!.pop();
@@ -57,12 +61,16 @@ class CompanyController extends ValueNotifier<CompanyState> {
   getAllCompanies() async {
     await Supabase.instance.client.getDataList<CompanyModel>(
       tableName: "companies",
-      onSuccess: (e) => value = value.copyWith(comapanies: ~e),
+      onSuccess: (e) => emit(value.copyWith(comapanies: ~e)),
       fromJsonList: (f) => f.map((m) => m.toCompanyModel()!).toList(),
       query: null,
-      onError: (e) => value = value.copyWith(error: e.getErrorMessage()),
-      showLoading: () => value = value.copyWith(isLoading: true),
-      hideLoading: () => value = value.copyWith(isLoading: false),
+      onError: (e) => emit(value.copyWith(error: e.getErrorMessage())),
+      showLoading: () => emit(value.copyWith(isLoading: true)),
+      hideLoading: () => emit(
+        value.copyWith(
+          isLoading: false,
+        ),
+      ),
     );
   }
 }

@@ -76,7 +76,8 @@ class _HomeScreenState extends State<HomeScreen>
             onPressed: () {
               _tabController.index == 0
                   ? unawaited(
-                      showModalBottomSheet(
+                      showDialog(
+                        useSafeArea: false,
                         context: context,
                         builder: (context) => AddProductDialog(),
                       ),

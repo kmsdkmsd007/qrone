@@ -25,10 +25,9 @@ class CategoryController extends ValueNotifier<CategoryState> {
       /// Example matches: "Cat", "computer", "Spacecraft", "acceptance"
       /// @param tableName The name of the table to query
       /// @return A query builder instance that matches titles containing 'c' or 'C'
-      query: (tableName) => Supabase.instance.client
-          .from(tableName)
-          .select()
-          .ilike('title', '%C%'),
+      query: (tableName) => Supabase.instance.client.from(tableName).select()
+      // .ilike('title', '%C%')
+      ,
       onError: (e) => emit(value.copyWith(error: e.getErrorMessage())),
       showLoading: () => emit(value.copyWith(isLoading: true)),
       hideLoading: () => emit(
