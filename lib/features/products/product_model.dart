@@ -63,7 +63,7 @@ extension ProductModelExtension on ProductModel {
         'price_id': priceId,
 
         'category_id': category.id, // Assuming CategoryModel has toJson method
-        'bar_code': "barCode",
+        'barcode': "barCode",
       };
 }
 

@@ -15,15 +15,14 @@ class ProductController extends ValueNotifier<ProductState> {
   }) : super(createProductState());
   void getAllProducts() async {
     value = value.copyWith(isLoading: true);
-    try {
-      final a = await Supabase.instance.client.from('products').select();
-      final products = a.map((e) => e.toProductModel()!).toList();
-      value = value.copyWith(isLoading: false, products: ~products);
-    } on PostgrestException catch (e) {
-      value = value.copyWith(error: e.friendlyMessage, isLoading: false);
-    } catch (e) {
-      value = value.copyWith(error: e.toString(), isLoading: false);
-    }
+
+    final supabase = Supabase.instance.client;
+
+    final a = await supabase.from('products').select(
+          'id, price_id, category_id, name, barcode, product_image, company:companies(id, name)',
+        );
+
+    print(a);
   }
 
   modifyProduct(ProductModel p) {
@@ -40,15 +39,15 @@ class ProductController extends ValueNotifier<ProductState> {
   }
 
   Future<String> _uploadImage(File image) async {
+    final name = image.path.split('/').last;
     await Supabase.instance.client.storage.from('product-images').upload(
-          'public/${image.path.split('/').last}',
+          '${Supabase.instance.client.auth.currentUser!.id}/a$name',
           image,
-          fileOptions: FileOptions(cacheControl: '3600', upsert: false),
         );
 
     final publicUrl = Supabase.instance.client.storage
-        .from('product-images')
-        .getPublicUrl('public/${image.path.split('/').last}');
+        .from('product-images/${Supabase.instance.client.auth.currentUser!.id}')
+        .getPublicUrl('a$name');
     return publicUrl;
   }
 
@@ -61,7 +60,7 @@ class ProductController extends ValueNotifier<ProductState> {
           p.copyWith(priceId: priceId, imageUrl: imageUrl);
       final a = await Supabase.instance.client
           .from('products')
-          .upsert(productWithDetails.toJson())
+          .insert(productWithDetails.toJson())
           .select();
       final products = a.map((e) => e.toProductModel()!).toList();
       value = value.copyWith(isLoading: false, products: ~products);
