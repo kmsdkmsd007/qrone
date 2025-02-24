@@ -12,7 +12,7 @@ class LoginController extends ValueNotifier<LoginState> {
     required AuthService authService,
   })  : _authService = authService,
         super(createLoginState());
-        
+
   // LoginController({required this.navigatorKey}):super(createLoginState());
 
   void togglePasswordVisibility() {
@@ -20,10 +20,14 @@ class LoginController extends ValueNotifier<LoginState> {
   }
 
   Future<void> login(String email, String password) async {
+    value = value.copyWith(isLoading: true);
     try {
       await _authService.signIn(email, password);
       navigatorKey.currentState?.pushReplacementNamed(Routes.home);
+      value = value.copyWith(isLoading: true);
     } catch (e) {
+      value = value.copyWith(isLoading: true);
+
       // Handle login errors
       debugPrint(e.toString());
     }

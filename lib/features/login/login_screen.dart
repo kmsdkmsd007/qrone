@@ -4,23 +4,23 @@ import 'package:qrone/features/login/login_state.dart';
 import 'package:qrone/main.dart';
 
 class LoginPage extends StatelessWidget {
-   LoginPage({super.key});
-
+  LoginPage({super.key});
 
   final formKey = GlobalKey<FormState>();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final controller= container.get<LoginController>();
-  
+  final controller = container.get<LoginController>();
+
   @override
   Widget build(BuildContext context) => Scaffold(
-      appBar: AppBar(
-        title: Text('Login'),
-      ),
-      backgroundColor: Colors.white,
-      body: ValueListenableBuilder<LoginState>(
-        valueListenable: controller, // Ensure this listens to the correct controller
-        builder: (context, value,child) => Center(
+        appBar: AppBar(
+          title: Text('Login'),
+        ),
+        backgroundColor: Colors.white,
+        body: ValueListenableBuilder<LoginState>(
+          valueListenable:
+              controller, // Ensure this listens to the correct controller
+          builder: (context, value, child) => Center(
             child: SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -49,14 +49,16 @@ class LoginPage extends StatelessWidget {
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(height: 30),
-                       TextFormField(
+                      TextFormField(
                         controller: emailController,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.black),
-                              borderRadius: BorderRadius.circular(8.0),),
+                            borderSide: BorderSide(color: Colors.black),
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
                           errorBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.red),),
+                            borderSide: BorderSide(color: Colors.red),
+                          ),
                           labelText: 'Email',
                         ),
                         validator: (value) {
@@ -73,13 +75,17 @@ class LoginPage extends StatelessWidget {
                         obscureText: value.isPassword,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8.0),),
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
                           errorBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.red),),
+                            borderSide: BorderSide(color: Colors.red),
+                          ),
                           labelText: 'Password',
                           suffixIcon: IconButton(
                             icon: Icon(
-                              value.isPassword ? Icons.visibility : Icons.visibility_off,
+                              value.isPassword
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
                             ),
                             onPressed: controller.togglePasswordVisibility,
                           ),
@@ -107,24 +113,31 @@ class LoginPage extends StatelessWidget {
                       ),
                       const SizedBox(height: 20),
                       // Sign In Button
-                      ElevatedButton(
-                        onPressed: () {
-                          if (formKey.currentState!.validate()) {
-                           controller.login(emailController.text, passwordController.text);
-                          }
-                        },
-                        style: ElevatedButton.styleFrom(
-                          minimumSize:
-                              Size(double.infinity, 50), // Full width button
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
-                        ),
-                        child: Text(
-                          "Sign in",
-                          style: TextStyle(fontSize: 16.0),
-                        ),
-                      ),
+                      value.isLoading
+                          ? Center(child: CircularProgressIndicator())
+                          : ElevatedButton(
+                              onPressed: () {
+                                if (formKey.currentState!.validate()) {
+                                  controller.login(
+                                    emailController.text,
+                                    passwordController.text,
+                                  );
+                                }
+                              },
+                              style: ElevatedButton.styleFrom(
+                                minimumSize: Size(
+                                  double.infinity,
+                                  50,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8.0),
+                                ),
+                              ),
+                              child: Text(
+                                "Sign in",
+                                style: TextStyle(fontSize: 16.0),
+                              ),
+                            ),
                       const SizedBox(height: 20),
                       // Create new account link
                       TextButton(
@@ -147,6 +160,6 @@ class LoginPage extends StatelessWidget {
               ),
             ),
           ),
-      ),
-    );
+        ),
+      );
 }

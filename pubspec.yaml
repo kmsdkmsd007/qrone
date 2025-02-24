@@ -39,6 +39,7 @@ dependencies:
   supabase_flutter: ^2.8.3
   dart_jsonwebtoken: ^2.14.2
   image_picker: ^1.1.2
+  flutter_barcode_scanner_plus: ^3.0.7
 
 dev_dependencies:
   flutter_test:

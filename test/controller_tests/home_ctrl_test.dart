@@ -9,13 +9,11 @@ import '../data/mocked_data.dart';
 import '../helper/utils.dart';
 
 void main() {
-  
-
   setUp(() async {
     mockAppLink();
     await Supabase.initialize(
-      url: 'https://mock.supabase.co',  // Mock URL
-      anonKey: 'mock-key-12345',        // Mock key
+      url: 'https://mock.supabase.co', // Mock URL
+      anonKey: 'mock-key-12345', // Mock key
       authOptions: FlutterAuthClientOptions(
         detectSessionInUri: false,
         // Mock storage implementations
@@ -25,14 +23,20 @@ void main() {
         autoRefreshToken: false,
       ),
     );
-    
+
     // Mock successful sign in response
     final mockSession = Session(
       accessToken: 'mock-access-token',
       refreshToken: 'mock-refresh-token',
-      
       expiresIn: 3600,
-      tokenType: '', user: User(id: 'id', appMetadata: {}, userMetadata: {}, aud: "", createdAt: ""),
+      tokenType: '',
+      user: User(
+        id: 'id',
+        appMetadata: {},
+        userMetadata: {},
+        aud: "",
+        createdAt: "",
+      ),
     );
     await Supabase.instance.client.auth.setSession(mockSession.accessToken);
   });
@@ -44,15 +48,17 @@ void main() {
   testWidgets('Signing out triggers AuthChangeEvent.signedOut event',
       (tester) async {
     container = composeTest(true).toContainer();
-    
-    // Create a MaterialApp with proper navigation setup
-    await tester.pumpWidget(MaterialApp(
-      navigatorKey: container.get<GlobalKey<NavigatorState>>(),
-      onGenerateRoute: AppRouter.generateRoute,
-      home: const HomeScreen(),  // Use home instead of initialRoute
-    ),);
 
-    await tester.pumpAndSettle();  // Wait for initial frame
+    // Create a MaterialApp with proper navigation setup
+    await tester.pumpWidget(
+      MaterialApp(
+        navigatorKey: container.get<GlobalKey<NavigatorState>>(),
+        onGenerateRoute: AppRouter.generateRoute,
+        home: HomeScreen(), // Use home instead of initialRoute
+      ),
+    );
+
+    await tester.pumpAndSettle(); // Wait for initial frame
 
     // Verify home screen is showing first
     expect(find.byType(HomeScreen), findsOneWidget);

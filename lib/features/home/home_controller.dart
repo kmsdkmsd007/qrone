@@ -7,8 +7,9 @@ class HomeController extends ValueNotifier<int> {
   HomeController({
     required this.navigatorKey,
   }) : super(0);
-  changeIndex(int v) {
-    value = v;
+
+  void changeIndex(int index) {
+    value = index;
   }
 
   Future<void> logout() async {

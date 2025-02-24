@@ -19,12 +19,6 @@ class CategoryController extends ValueNotifier<CategoryState> {
       tableName: "categories",
       onSuccess: (e) => emit(value.copyWith(categories: ~e)),
       fromJsonList: (f) => f.map((m) => m.toCategoryModel()!).toList(),
-
-      /// Queries the database table to find entries where the 'title' column contains
-      /// either 'c' or 'C' (case-insensitive).
-      /// Example matches: "Cat", "computer", "Spacecraft", "acceptance"
-      /// @param tableName The name of the table to query
-      /// @return A query builder instance that matches titles containing 'c' or 'C'
       query: (tableName) => Supabase.instance.client.from(tableName).select()
       // .ilike('title', '%C%')
       ,
@@ -54,6 +48,9 @@ class CategoryController extends ValueNotifier<CategoryState> {
       );
 
       getAllCategories();
+      ScaffoldMessenger.of(navigatorKey.currentContext!).showSnackBar(
+        SnackBar(content: Text("Category Added Successfully!")),
+      );
       navigatorKey.currentState?.pop();
     } on PostgrestException catch (e) {
       ScaffoldMessenger.of(navigatorKey.currentState!.context).showSnackBar(
@@ -65,8 +62,6 @@ class CategoryController extends ValueNotifier<CategoryState> {
         addState:
             value.addCategoryState.copyWith(isLoading: false, isAdded: false),
       );
-
-      navigatorKey.currentState!.pop();
     }
   }
 }

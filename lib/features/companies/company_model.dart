@@ -7,6 +7,8 @@ CompanyModel companyModel({
     (id: id, name: name);
 
 extension CompanyModelExtension on CompanyModel {
+  Map<String, dynamic> toMap() => {'name': name};
+
   CompanyModel copyWith({int? id, String? name}) => (
         id: id ?? this.id,
         name: name ?? this.name,

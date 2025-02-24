@@ -53,8 +53,6 @@ class CompanyController extends ValueNotifier<CompanyState> {
           isLoading: false,
         ),
       );
-
-      navigatorKey.currentState!.pop();
     }
   }
 

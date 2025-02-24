@@ -6,6 +6,7 @@ import 'package:qrone/features/home/home_controller.dart';
 import 'package:qrone/features/login/login_controller.dart';
 import 'package:qrone/features/products/product_controller.dart';
 import 'package:qrone/features/splash/splash_controller.dart';
+import 'package:qrone/features/update_product/update_product_controller.dart';
 import 'package:qrone/navigation/navigations.dart';
 import 'package:qrone/services/auth_service.dart';
 import 'package:qrone/theme.dart';
@@ -70,6 +71,11 @@ IocContainerBuilder compose([bool allowOverrides = false]) =>
       )
       ..addSingleton(
         (container) => ProductController(
+          navigatorKey: container.get<GlobalKey<NavigatorState>>(),
+        ),
+      )
+      ..addSingleton(
+        (container) => UpdateProductController(
           navigatorKey: container.get<GlobalKey<NavigatorState>>(),
         ),
       );

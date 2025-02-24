@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:qrone/features/products/product_controller.dart';
 import 'package:qrone/features/products/product_model.dart';
 import 'package:qrone/main.dart';
+import 'package:qrone/navigation/navigations.dart';
 
 class ProductScreen extends StatelessWidget {
   ProductScreen({super.key});
@@ -29,6 +30,7 @@ class ProductScreen extends StatelessWidget {
                       itemCount: controller.value.products.length,
                       itemBuilder: (context, index) => ProductCard(
                         product: controller.value.products[index],
+                        index: index,
                       ),
                     ),
                   ),
@@ -37,66 +39,76 @@ class ProductScreen extends StatelessWidget {
 
 class ProductCard extends StatelessWidget {
   final ProductModel product;
+  final int index;
 
-  const ProductCard({required this.product});
+  const ProductCard({required this.product, required this.index});
 
   @override
-  Widget build(BuildContext context) => Card(
-        elevation: 2,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              height: 150,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: NetworkImage(product.imageUrl),
-                  fit: BoxFit.cover,
+  Widget build(BuildContext context) => GestureDetector(
+        onTap: () {
+          Navigator.of(context)
+              .pushNamed(Routes.productDetails, arguments: product.id);
+        },
+        child: Card(
+          elevation: 2,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Hero(
+                tag: '${product.id}',
+                child: Container(
+                  height: 150,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: NetworkImage(product.imageUrl),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    product.name,
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      product.name,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 4),
-                  Text(
-                    product.company.name,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.grey[600],
+                    SizedBox(height: 4),
+                    Text(
+                      product.company.name,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.grey[600],
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 4),
-                  Text(
-                    product.category.name,
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.blue,
+                    SizedBox(height: 4),
+                    Text(
+                      product.category.name,
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.blue,
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 8),
-                  Text(
-                    product.price.toStringAsFixed(2),
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.green,
+                    SizedBox(height: 8),
+                    Text(
+                      product.price.current_price.toStringAsFixed(2),
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.green,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       );
 }
