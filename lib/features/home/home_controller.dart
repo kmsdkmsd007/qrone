@@ -4,9 +4,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 class HomeController extends ValueNotifier<int> {
   final GlobalKey<NavigatorState> navigatorKey;
 
-  HomeController({
-    required this.navigatorKey,
-  }) : super(0);
+  HomeController({required this.navigatorKey}) : super(0);
 
   void changeIndex(int index) {
     value = index;
@@ -15,8 +13,8 @@ class HomeController extends ValueNotifier<int> {
   Future<void> logout() async {
     try {
       await Supabase.instance.client.auth.signOut();
-    } catch (_) {
-      print(_);
+    } catch (e) {
+      print(e);
     }
   }
 }
