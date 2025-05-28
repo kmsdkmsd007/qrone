@@ -3,6 +3,8 @@ import 'dart:typed_data';
 import 'package:image/image.dart' as img;
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:qrone/features/categories/category_model.dart';
+import 'package:qrone/features/companies/company_model.dart';
 import 'package:qrone/features/products/product_model.dart';
 import 'package:qrone/features/products/product_state.dart';
 import 'package:qrone/helpers/NotifierWrapper.dart';
@@ -68,10 +70,13 @@ class ProductController extends ValueNotifier<ProductState> {
     );
   }
 
-  void addPr(ProductModel p) async {
+  Future<bool> addPr(ProductModel p) async {
     value = value.copyWith(isLoading: true);
     try {
-      final imageUrl = await handleImageUpload(p.imageUrl, p.name);
+      final imageUrl =
+          value.selectedProduct.imageUrl.isEmpty
+              ? null
+              : await handleImageUpload(p.imageUrl, p.name);
 
       final response = await Supabase.instance.client.rpc(
         'add_product_with_price',
@@ -85,16 +90,29 @@ class ProductController extends ValueNotifier<ProductState> {
         },
       );
       if (response['added'] = true) {
-        ScaffoldMessenger.of(
-          navigatorKey.currentContext!,
-        ).showSnackBar(SnackBar(content: Text('Product added successfully')));
-        getAllProducts();
+        value = value.copyWith(
+          isLoading: false,
+          selectedProduct: value.selectedProduct.copyWith(
+            name: "",
+            price: createPriceModel(
+              id: -1,
+              updated_at: "",
+              current_price: 0.0,
+              previous_price: 0.0,
+            ),
+            barCode: "",
+            category: categoryModel(id: -1, name: ""),
+            company: companyModel(id: -1, name: ""),
+            imageUrl: "",
+          ),
+        );
 
-        Navigator.of(navigatorKey.currentContext!).pop();
+        return true;
       } else {
         ScaffoldMessenger.of(
           navigatorKey.currentContext!,
         ).showSnackBar(SnackBar(content: Text(response['reason'])));
+        return false;
       }
     } on PostgrestException catch (e) {
       value = value.copyWith(isLoading: false);
@@ -102,9 +120,11 @@ class ProductController extends ValueNotifier<ProductState> {
         navigatorKey.currentContext!,
       ).showSnackBar(SnackBar(content: Text(e.friendlyMessage)));
       print(e.toString());
+      return false;
     } catch (e) {
       print(e.toString());
       value = value.copyWith(error: e.toString(), isLoading: false);
+      return false;
     }
   }
 }

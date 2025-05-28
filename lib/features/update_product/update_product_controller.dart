@@ -12,9 +12,8 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 class UpdateProductController extends ValueNotifier<UpdateProductState> {
   final GlobalKey<NavigatorState> navigatorKey;
 
-  UpdateProductController({
-    required this.navigatorKey,
-  }) : super(createUpdateProductState());
+  UpdateProductController({required this.navigatorKey})
+    : super(createUpdateProductState());
 
   Future<String> updateImage(String filePath, String fileName) async {
     final file = File(filePath);
@@ -50,6 +49,7 @@ class UpdateProductController extends ValueNotifier<UpdateProductState> {
   }
 
   updateProduct(
+    String barCode,
     ProductModel p, {
     String alternateUrl = "",
   }) async {
@@ -61,25 +61,26 @@ class UpdateProductController extends ValueNotifier<UpdateProductState> {
         p = p.copyWith(imageUrl: alternateUrl);
       }
       await updatePrice(p.price);
-      await await Supabase.instance.client
+      p = p.copyWith(barCode: barCode);
+      await Supabase.instance.client
           .from('products')
           .update(p.toJson())
           .eq('id', p.id);
-      ScaffoldMessenger.of(navigatorKey.currentContext!).showSnackBar(
-        SnackBar(content: Text('Product updated successfully')),
-      );
+      ScaffoldMessenger.of(
+        navigatorKey.currentContext!,
+      ).showSnackBar(SnackBar(content: Text('Product updated successfully')));
 
       container.get<ProductController>().getAllProducts();
       navigatorKey.currentState!.pop();
     } on PostgrestException catch (e) {
-      ScaffoldMessenger.of(navigatorKey.currentContext!).showSnackBar(
-        SnackBar(content: Text(e.friendlyMessage)),
-      );
+      ScaffoldMessenger.of(
+        navigatorKey.currentContext!,
+      ).showSnackBar(SnackBar(content: Text(e.friendlyMessage)));
     } catch (e) {
       print(e.toString());
-      ScaffoldMessenger.of(navigatorKey.currentContext!).showSnackBar(
-        SnackBar(content: Text(e.toString())),
-      );
+      ScaffoldMessenger.of(
+        navigatorKey.currentContext!,
+      ).showSnackBar(SnackBar(content: Text(e.toString())));
     }
   }
 

@@ -11,6 +11,8 @@ import 'package:qrone/main.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
+final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
 class AddProductDialog extends StatelessWidget {
   AddProductDialog({super.key}) {
     // Fetch categories when dialog opens
@@ -19,7 +21,6 @@ class AddProductDialog extends StatelessWidget {
   final productController = container.get<ProductController>();
   final categoryController = container.get<CategoryController>();
   final companyController = container.get<CompanyController>();
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   TextEditingController nameController = TextEditingController();
   TextEditingController priceController = TextEditingController();
@@ -41,39 +42,41 @@ class AddProductDialog extends StatelessWidget {
   void _showImageSourceActionSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
-      builder: (context) => SafeArea(
-        child: Wrap(
-          children: <Widget>[
-            ListTile(
-              leading: Icon(Icons.photo_library),
-              title: Text('Gallery'),
-              onTap: () {
-                _pickImage(ImageSource.gallery);
-                Navigator.of(context).pop();
-              },
+      builder:
+          (context) => SafeArea(
+            child: Wrap(
+              children: <Widget>[
+                ListTile(
+                  leading: Icon(Icons.photo_library),
+                  title: Text('Gallery'),
+                  onTap: () {
+                    _pickImage(ImageSource.gallery);
+                    Navigator.of(context).pop();
+                  },
+                ),
+                ListTile(
+                  leading: Icon(Icons.photo_camera),
+                  title: Text('Camera'),
+                  onTap: () {
+                    _pickImage(ImageSource.camera);
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
             ),
-            ListTile(
-              leading: Icon(Icons.photo_camera),
-              title: Text('Camera'),
-              onTap: () {
-                _pickImage(ImageSource.camera);
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        ),
-      ),
+          ),
     );
   }
 
   @override
   Widget build(BuildContext context) => Dialog.fullscreen(
-        backgroundColor: Colors.white,
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: ValueListenableBuilder(
-            valueListenable: productController,
-            builder: (context, data, child) => Form(
+    backgroundColor: Colors.white,
+    child: Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: ValueListenableBuilder(
+        valueListenable: productController,
+        builder:
+            (context, data, child) => Form(
               key: formKey,
               child: SingleChildScrollView(
                 child: Column(
@@ -145,11 +148,11 @@ class AddProductDialog extends StatelessWidget {
                           onTap: () async {
                             final barcode =
                                 await FlutterBarcodeScanner.scanBarcode(
-                              '#ff6666',
-                              'Cancel',
-                              true,
-                              ScanMode.BARCODE,
-                            );
+                                  '#ff6666',
+                                  'Cancel',
+                                  true,
+                                  ScanMode.BARCODE,
+                                );
                             if (barcode != '-1') {
                               barCodeController.text = barcode;
                             }
@@ -181,31 +184,38 @@ class AddProductDialog extends StatelessWidget {
                         categoryController.getAllCategories();
                         showModalBottomSheet(
                           context: context,
-                          builder: (context) => ValueListenableBuilder(
-                            valueListenable: categoryController,
-                            builder: (context, catVal, child) =>
-                                Selector<CategoryModel>(
-                              items: catVal.categories,
-                              isLoading: catVal.isLoading,
-                              selected: productController
-                                  .value.selectedProduct.category,
-                              onSelect: (CategoryModel category) {
-                                productController.modifyProduct(
-                                  data.selectedProduct.copyWith(
-                                    category: category,
-                                  ),
-                                );
-                                Navigator.pop(context);
-                              },
-                              text: (CategoryModel m) => Text(m.name),
-                            ),
-                          ),
+                          builder:
+                              (context) => ValueListenableBuilder(
+                                valueListenable: categoryController,
+                                builder:
+                                    (context, catVal, child) =>
+                                        Selector<CategoryModel>(
+                                          items: catVal.categories,
+                                          isLoading: catVal.isLoading,
+                                          selected:
+                                              productController
+                                                  .value
+                                                  .selectedProduct
+                                                  .category,
+                                          onSelect: (CategoryModel category) {
+                                            productController.modifyProduct(
+                                              data.selectedProduct.copyWith(
+                                                category: category,
+                                              ),
+                                            );
+                                            Navigator.pop(context);
+                                          },
+                                          text:
+                                              (CategoryModel m) => Text(m.name),
+                                        ),
+                              ),
                         );
                       },
                       decoration: InputDecoration(
-                        hintText: data.selectedProduct.category.name.isEmpty
-                            ? 'Select Category'
-                            : data.selectedProduct.category.name,
+                        hintText:
+                            data.selectedProduct.category.name.isEmpty
+                                ? 'Select Category'
+                                : data.selectedProduct.category.name,
                         border: OutlineInputBorder(),
                       ),
                     ),
@@ -223,114 +233,148 @@ class AddProductDialog extends StatelessWidget {
                         companyController.getAllCompanies();
                         showModalBottomSheet(
                           context: context,
-                          builder: (context) => ValueListenableBuilder(
-                            valueListenable: companyController,
-                            builder: (context, comVal, child) =>
-                                Selector<CompanyModel>(
-                              items: comVal.companies,
-                              isLoading: comVal.isLoading,
-                              selected: productController
-                                  .value.selectedProduct.company,
-                              onSelect: (CompanyModel company) {
-                                productController.modifyProduct(
-                                  data.selectedProduct.copyWith(
-                                    company: company,
-                                  ),
-                                );
-                                Navigator.pop(context);
-                              },
-                              text: (CompanyModel m) => Text(m.name),
-                            ),
-                          ),
+                          builder:
+                              (context) => ValueListenableBuilder(
+                                valueListenable: companyController,
+                                builder:
+                                    (context, comVal, child) =>
+                                        Selector<CompanyModel>(
+                                          items: comVal.companies,
+                                          isLoading: comVal.isLoading,
+                                          selected:
+                                              productController
+                                                  .value
+                                                  .selectedProduct
+                                                  .company,
+                                          onSelect: (CompanyModel company) {
+                                            productController.modifyProduct(
+                                              data.selectedProduct.copyWith(
+                                                company: company,
+                                              ),
+                                            );
+                                            Navigator.pop(context);
+                                          },
+                                          text:
+                                              (CompanyModel m) => Text(m.name),
+                                        ),
+                              ),
                         );
                       },
                       decoration: InputDecoration(
-                        hintText: data.selectedProduct.company.name.isEmpty
-                            ? 'Select Company'
-                            : data.selectedProduct.company.name,
+                        hintText:
+                            data.selectedProduct.company.name.isEmpty
+                                ? 'Select Company'
+                                : data.selectedProduct.company.name,
                         border: OutlineInputBorder(),
                       ),
                     ),
                     SizedBox(height: 16),
                     FormField<String>(
                       validator: (value) {
-                        if (data.selectedProduct.imageUrl.isEmpty) {
-                          return 'Please select an image';
-                        }
+                        // if (data.selectedProduct.imageUrl.isEmpty) {
+                        //   return 'Please select an image';
+                        // }
                         return null;
                       },
-                      builder: (FormFieldState<String> state) => Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          GestureDetector(
-                            onTap: () => _showImageSourceActionSheet(context),
-                            child: Container(
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  color:
-                                      state.hasError ? Colors.red : Colors.grey,
-                                ),
-                                borderRadius: BorderRadius.circular(4),
-                              ),
-                              child: data.selectedProduct.imageUrl.isEmpty
-                                  ? Container(
-                                      height: 150,
-                                      child:
-                                          Center(child: Text('Select Image')),
-                                    )
-                                  : Image.file(
-                                      File(data.selectedProduct.imageUrl),
-                                      fit: BoxFit.contain,
+                      builder:
+                          (FormFieldState<String> state) => Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              GestureDetector(
+                                onTap:
+                                    () => _showImageSourceActionSheet(context),
+                                child: Container(
+                                  width: double.infinity,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color:
+                                          state.hasError
+                                              ? Colors.red
+                                              : Colors.grey,
                                     ),
-                            ),
-                          ),
-                          if (state.hasError)
-                            Padding(
-                              padding: const EdgeInsets.only(top: 8, left: 12),
-                              child: Text(
-                                state.errorText!,
-                                style: TextStyle(
-                                  color: Colors.red,
-                                  fontSize: 12,
+                                    borderRadius: BorderRadius.circular(4),
+                                  ),
+                                  child:
+                                      data.selectedProduct.imageUrl.isEmpty
+                                          ? Container(
+                                            height: 150,
+                                            child: Center(
+                                              child: Text('Select Image'),
+                                            ),
+                                          )
+                                          : Image.file(
+                                            File(data.selectedProduct.imageUrl),
+                                            fit: BoxFit.contain,
+                                          ),
                                 ),
                               ),
-                            ),
-                        ],
-                      ),
+                              if (state.hasError)
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                    top: 8,
+                                    left: 12,
+                                  ),
+                                  child: Text(
+                                    state.errorText!,
+                                    style: TextStyle(
+                                      color: Colors.red,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          ),
                     ),
                     SizedBox(height: 16),
                     ValueListenableBuilder(
                       valueListenable: productController,
-                      builder: (context, v, child) => v.isLoading
-                          ? Center(child: CircularProgressIndicator())
-                          : ElevatedButton(
-                              onPressed: () async {
-                                if (formKey.currentState!.validate()) {
-                                  productController.addPr(
-                                    data.selectedProduct.copyWith(
-                                      name: nameController.text,
-                                      price: createPriceModel(
-                                        id: -1,
-                                        updated_at: "",
-                                        current_price:
-                                            double.parse(priceController.text),
-                                        previous_price:
-                                            double.parse(priceController.text),
-                                      ),
-                                      barCode: barCodeController.text,
-                                    ),
-                                  );
-                                }
-                              },
-                              child: Text('Add Product'),
-                            ),
+                      builder:
+                          (context, v, child) =>
+                              v.isLoading
+                                  ? Center(child: CircularProgressIndicator())
+                                  : ElevatedButton(
+                                    onPressed: () async {
+                                      if (formKey.currentState!.validate()) {
+                                        var a = await productController.addPr(
+                                          data.selectedProduct.copyWith(
+                                            name: nameController.text,
+                                            price: createPriceModel(
+                                              id: -1,
+                                              updated_at: "",
+                                              current_price: double.parse(
+                                                priceController.text,
+                                              ),
+                                              previous_price: double.parse(
+                                                priceController.text,
+                                              ),
+                                            ),
+                                            barCode: barCodeController.text,
+                                          ),
+                                        );
+                                        if (a) {
+                                          barCodeController.clear();
+                                          priceController.clear();
+                                          nameController.clear();
+                                          ScaffoldMessenger.of(
+                                            context,
+                                          ).showSnackBar(
+                                            SnackBar(
+                                              content: Text(
+                                                'Product added successfully',
+                                              ),
+                                            ),
+                                          );
+                                        }
+                                      }
+                                    },
+                                    child: Text('Add Product'),
+                                  ),
                     ),
                   ],
                 ),
               ),
             ),
-          ),
-        ),
-      );
+      ),
+    ),
+  );
 }

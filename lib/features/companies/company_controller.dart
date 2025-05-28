@@ -10,9 +10,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 class CompanyController extends ValueNotifier<CompanyState> {
   final GlobalKey<NavigatorState> navigatorKey;
 
-  CompanyController({
-    required this.navigatorKey,
-  }) : super(createCompanyState());
+  CompanyController({required this.navigatorKey}) : super(createCompanyState());
 
   // void getAllCompanies() async {
   //   value = value.copyWith(isLoading: true);
@@ -31,28 +29,18 @@ class CompanyController extends ValueNotifier<CompanyState> {
     try {
       value = value.copyWith(isLoading: true);
 
-      await Supabase.instance.client
-          .from('companies')
-          .insert({"name": company});
-      emit(
-        value.copyWith(
-          isLoading: false,
-        ),
-      );
+      await Supabase.instance.client.from('companies').insert({
+        "name": company,
+      });
+      emit(value.copyWith(isLoading: false));
 
       getAllCompanies();
       navigatorKey.currentState?.pop();
     } on PostgrestException catch (e) {
-      ScaffoldMessenger.of(navigatorKey.currentState!.context).showSnackBar(
-        SnackBar(
-          content: Text(e.friendlyMessage),
-        ),
-      );
-      emit(
-        value.copyWith(
-          isLoading: false,
-        ),
-      );
+      ScaffoldMessenger.of(
+        navigatorKey.currentState!.context,
+      ).showSnackBar(SnackBar(content: Text(e.friendlyMessage)));
+      emit(value.copyWith(isLoading: false));
     }
   }
 
@@ -61,14 +49,15 @@ class CompanyController extends ValueNotifier<CompanyState> {
       tableName: "companies",
       onSuccess: (e) => emit(value.copyWith(comapanies: ~e)),
       fromJsonList: (f) => f.map((m) => m.toCompanyModel()!).toList(),
-      query: null,
+      query:
+          (tableName) => Supabase.instance.client
+              .from(tableName)
+              .select()
+              .order('name', ascending: true),
+
       onError: (e) => emit(value.copyWith(error: e.getErrorMessage())),
       showLoading: () => emit(value.copyWith(isLoading: true)),
-      hideLoading: () => emit(
-        value.copyWith(
-          isLoading: false,
-        ),
-      ),
+      hideLoading: () => emit(value.copyWith(isLoading: false)),
     );
   }
 }

@@ -13,14 +13,13 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(
-          title: Text('Login'),
-        ),
-        backgroundColor: Colors.white,
-        body: ValueListenableBuilder<LoginState>(
-          valueListenable:
-              controller, // Ensure this listens to the correct controller
-          builder: (context, value, child) => Center(
+    appBar: AppBar(title: Text('Login')),
+    backgroundColor: Colors.white,
+    body: ValueListenableBuilder<LoginState>(
+      valueListenable:
+          controller, // Ensure this listens to the correct controller
+      builder:
+          (context, value, child) => Center(
             child: SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -116,28 +115,25 @@ class LoginPage extends StatelessWidget {
                       value.isLoading
                           ? Center(child: CircularProgressIndicator())
                           : ElevatedButton(
-                              onPressed: () {
-                                if (formKey.currentState!.validate()) {
-                                  controller.login(
-                                    emailController.text,
-                                    passwordController.text,
-                                  );
-                                }
-                              },
-                              style: ElevatedButton.styleFrom(
-                                minimumSize: Size(
-                                  double.infinity,
-                                  50,
-                                ),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8.0),
-                                ),
-                              ),
-                              child: Text(
-                                "Sign in",
-                                style: TextStyle(fontSize: 16.0),
+                            onPressed: () {
+                              if (formKey.currentState!.validate()) {
+                                controller.login(
+                                  emailController.text,
+                                  passwordController.text,
+                                );
+                              }
+                            },
+                            style: ElevatedButton.styleFrom(
+                              minimumSize: Size(double.infinity, 50),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8.0),
                               ),
                             ),
+                            child: Text(
+                              "Sign in",
+                              style: TextStyle(fontSize: 16.0),
+                            ),
+                          ),
                       const SizedBox(height: 20),
                       // Create new account link
                       TextButton(
@@ -160,6 +156,6 @@ class LoginPage extends StatelessWidget {
               ),
             ),
           ),
-        ),
-      );
+    ),
+  );
 }
